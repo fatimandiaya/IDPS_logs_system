@@ -140,14 +140,14 @@ Sinon, tu risques de voir dans Kibana que tu as des données, mais vides.
 #sudo systemctl enable logstash && sudo systemctl start logstash
 #sudo systemctl status logstash
 
-  IMAGE
+![12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/12.png)
 
 Si le pare-feu est actif, autorise le port 5044 pour que Logstash reçoive les logs.
 
 ### 4. Installer Kibana
 #sudo apt install kibana
 
-IMAGE
+![13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/13.png)
 
  1- Modifier le fichier de configuration :
  #sudo nano /etc/kibana/kibana.yml
@@ -160,11 +160,11 @@ IMAGE
 #sudo systemctl enable kibana && sudo systemctl start kibana
 #sudo systemctl status kibana
 
-IMAGE
+![14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/14.png)
 
 Si tout s’est bien passé, tu peux naviguer vers l’adresse IP de ton serveur ELK dans un navigateur : tu verras la page d’accueil de Kibana.
 
-IMAGE
+![15](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/15.png)
 
 ### 5. Installer Filebeat sur le serveur source de logs
 
@@ -173,15 +173,14 @@ Sur la machine dont tu veux envoyer les logs :
   1- Télécharger et installer Filebeat :
      #curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.2-amd64.deb
 
-     IMAGE
-
+    ![16](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/16.png)
 
    #sudo dpkg -i filebeat-8.9.2-amd64.deb
      
   2- Ouvrir le fichier de configuration :
     #sudo nano /etc/filebeat/filebeat.yml
 
- IMAGE
+ ![FLB](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/FLB.png)
 
  Comme tu vas envoyer les logs à Logstash (et non directement à Elasticsearch), commente la section output.elasticsearch :
 
