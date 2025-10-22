@@ -92,13 +92,14 @@ IMAGE
 
 IMAGE
 
-***Attention*** : la sécurité d’Elasticsearch est activée par défaut. Le mot de passe, les certificats et les clés te seront affichés dans le terminal — il faut les sauvegarder quelque part. Comme ici on garde l’installation locale (non accessible depuis l’extérieur), on va désactiver les fonctions de sécurité.
+***Attention*** : la sécurité d’Elasticsearch est activée par défaut. Le mot de passe, les certificats et les clés te seront affichés dans le terminal — il faut les sauvegarder quelque part. 
+Comme ici on garde l’installation locale (non accessible depuis l’extérieur), on va désactiver les fonctions de sécurité.
 
  5- Modifier le fichier de configuration d’Elasticsearch :
 
    #sudo nano /etc/elasticsearch/elasticsearch.yml
    
-         - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
+     - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
 
          IMAGE
 
