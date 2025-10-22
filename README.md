@@ -330,7 +330,7 @@ Nous allons vérifier si Oinkmaster est bien installé avec la commande **oinkma
 
 **#oinkmaster.pl -V**
 
- ![24](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/24.png)
+ ![24](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/24%20OINKMAKER.png)
 
 Nous allons éditer le fichier :
 
