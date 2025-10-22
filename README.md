@@ -122,9 +122,64 @@ IMAGE
 Tu devrais obtenir une réponse JSON contenant des informations sur la version, le cluster, etc.
 Si tu n’as pas cette réponse, vérifie la configuration et les règles du pare-feu (le port 9200 doit être autorisé).
 
---- 
 
 ### 3. Installer Logstash
 #sudo apt install logstash
 
+IMAGE
 
+
+Pour que Logstash traite correctement les logs que tu enverras via Filebeat, il faut configurer des filtres.
+Sinon, tu risques de voir dans Kibana que tu as des données, mais vides.
+
+ 1. Créer un fichier de filtre :
+#sudo nano /etc/logstash/conf.d/beats.conf
+
+ 3. Activer et démarrer Logstash :
+#sudo systemctl enable logstash && sudo systemctl start logstash
+#sudo systemctl status logstash
+
+  IMAGE
+
+Si le pare-feu est actif, autorise le port 5044 pour que Logstash reçoive les logs.
+
+### 4. Installer Kibana
+#sudo apt install kibana
+
+IMAGE
+
+ 1- Modifier le fichier de configuration :
+ #sudo nano /etc/kibana/kibana.yml
+ -Décommente et ajuste :
+ -server.port: 5601
+ -server.host: "0.0.0.0" 
+ -elasticsearch.hosts: ["http://localhost:9200"]
+
+ 2- Activer et démarrer Kibana :
+#sudo systemctl enable kibana && sudo systemctl start kibana
+#sudo systemctl status kibana
+
+IMAGE
+
+Si tout s’est bien passé, tu peux naviguer vers l’adresse IP de ton serveur ELK dans un navigateur : tu verras la page d’accueil de Kibana.
+
+IMAGE
+
+### 5. Installer Filebeat sur le serveur source de logs
+
+Sur la machine dont tu veux envoyer les logs :
+ 
+  1- Télécharger et installer Filebeat :
+     #curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.2-amd64.deb
+
+     IMAGE
+
+
+     #sudo dpkg -i filebeat-8.9.2-amd64.deb
+     
+  2- Ouvrir le fichier de configuration :
+    #sudo nano /etc/filebeat/filebeat.yml
+
+ IMAGE
+
+ 
