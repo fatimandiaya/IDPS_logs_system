@@ -437,9 +437,9 @@ Le scan a été lancé depuis la machine Kali vers DVWA avec la commande suivant
 -192.168.50.20 : IP de la cible DVWA
 
 ![S11](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap1.png)
-![S12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S12.png)
-![S13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S13.png)
-![S14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S14.png)
+![S12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap2.png)
+![S13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap3.png)
+![S14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap4.png)
 
 
 **Scénario 2 :  Attaque par brute-force SSH**
@@ -452,15 +452,16 @@ D’abord nous avions procédé à l’ installation de  ssh sur notre IDS/SIEM
 #Sudo systemctl start ssh
 #Sudo systemctl enable ssh**
 
-![35](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/35.png)
+![35](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh1.png)
 
 
 Ensuite depuis kali nous avons exécuté : 
 **“ hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.50.20”**
 
-![36](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/36.png)
-![S21](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S21.png)
-![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S22.png)
+![36](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh2.png)
+![S21](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh3.png)
+![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh4.png)
+![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh5.png)
 
 
 
