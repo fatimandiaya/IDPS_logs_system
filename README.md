@@ -50,7 +50,7 @@ Pour parfaire à ce projet, nous avions mis en place une architecture virtualis�
  - Une machine simple ( windows / linux) (qui jouera le rôle de la cible en fonction du scénario)
  - Une machine serveur
 
-![Archi](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/Archi.png)
+![Archi](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/archi.png)
  
 ## IV. Installation & configuration
 
