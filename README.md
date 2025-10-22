@@ -184,7 +184,7 @@ Sur la machine dont tu veux envoyer les logs :
 
  Comme tu vas envoyer les logs à Logstash (et non directement à Elasticsearch), commente la section output.elasticsearch :
 
- IMAGE
+ ![FLB2](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/FLB2.png)
 
  décommente / active la section output.logstash en indiquant l'adresse IP de ton serveur ELK (au lieu de localhost) :
  
@@ -196,7 +196,7 @@ Sur la machine dont tu veux envoyer les logs :
     #sudo systemctl status filebeat
 
 
-IMAGE
+ ![17](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/17.png)
 
  4- Filebeat fournit des modules prédéfinis pour divers services (Apache, système, etc). Pour les visualiser :
  
@@ -209,20 +209,20 @@ Pour nous, on va activer les modules system et apache :
 
 Chaque module correspond à un fichier de configuration dans /etc/filebeat/modules.d/. Ouvre-les et mets enabled: true si ce n’est pas déjà fait. (pense aux questions de format, crochets, guillemets, etc.)
 
-IMAGE
+ ![FLB3](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/FLB3.png)
 
  5- Charger les modèles d’index dans Elasticsearch (en utilistant l’IP de ton serveur ELK) :
     
   #sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'
 
 
-IMAGE 
+ ![19](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/19.png)
 
  6- Charger les tableaux de bord (dashboards) dans Kibana 
    
    #sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['192.168.40.130:9200'] -E setup.kibana.host=192.168.40.130:5601
 
-IMAGE
+ ![20](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/20.png)
 
  7- Résultat final
  
@@ -311,7 +311,7 @@ On copie tous les fichiers ayant pour extension .conf et .map du répertoire **�
 
 Maintenant, nous allons vérifier si Snort est bien installé avec la commande **‶snort -V″** depuis le terminal :
 
-IMAGE
+ ![21](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/21.png)
 
 4.1- Installation des règles
 
@@ -323,7 +323,8 @@ Les règles de Snort sont des instructions ou codes qui décrivent les signature
 
 Oinkmaster est un script écrit avec le langage de programmation PERL par l’éditeur du logiciel qui va nous servir à mettre jour les fichiers de règles qui sont présents dans /etc/snort/rules. Pour permettre à Oinkmaster de télécharger les règles de Snort, nous avons besoin de le configurer en synchronisation avec le site officiel de Snort. Pour cela nous avons besoin d’une clé appelé « Oink code » sur le site de Snort. Après enregistrement notre « Oink code » est .Nous allons à présent mettre en place Oinkmaster.
 
-IMAGE
+ ![23B](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/23B.png)
+
 
 Nous allons vérifier si Oinkmaster est bien installé avec la commande **oinkmaster.pl -V**
 
