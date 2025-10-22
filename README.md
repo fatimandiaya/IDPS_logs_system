@@ -427,6 +427,7 @@ Ces cinq scénarios d’attaque ont été sélectionnés pour leur pertinence op
 -La collecte et centralisation des logs via syslog-ng/Logstash
 -La visualisation et l’analyse dans Kibana
 
+ ![34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/5_scenarios.png)
 
  **Scénario 1 — Scan de réseau avec Nmap**
  
@@ -525,7 +526,7 @@ Dans Kibana, on retrouve l’alerte générée par Snort avec le message “Malw
 
 Dans ce scénario, j’ai simulé une attaque par injection SQL dans un environnement volontairement vulnérable afin de tester la capacité de notre pipeline Snort + ELK à détecter ce type de menace. Comme pour les autres scénarios, la cible reste la machine Ubuntu-SRV, mais cette fois-ci, l’attaque vise spécifiquement DVWA (Damn Vulnerable Web Application), une application web conçue pour l’apprentissage et la simulation d’attaques. DVWA est déployée sur la VM Ubuntu-SRV au sein de notre topologie EVE-NG.
 Pour ce scénario, on a utilisé deux types d’injection SQL : contournement d’authentification et reconnaissance de schéma
-  - 1. Contournement d’authentification via OR 1=1#
+  - 1 Contournement d’authentification via OR 1=1#
 l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. Ainsi l'attaquant contourne la vérification des identifiants et d’accéder à l’application sans mot de passe valide.
 
 Sur kali, on accede a l'interface de DVWA , puis sur la section "SQL injectio" et au niveau du champ iput "user ID" on va injecté le payload : `1' OR 1=1#`
