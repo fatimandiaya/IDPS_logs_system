@@ -335,3 +335,60 @@ Nous allons éditer le fichier :
 **#vi /etc/oinkmaster.conf**
 
 IMAGE
+
+4.3 - Configuration de Snort 
+
+4.3.1- Configuration de snort en mode IDS :
+
+Pour configurer snort en mode Network Intrusion Detection System, nous allons effectuer quelques modifications dans le principal fichier de configuration de snort qui est snort.conf qui se trouve dans /etc/snort/snort.conf.
+
+**#vi /etc/snort/snort.conf**
+ 
+Nous allons modifier les lignes suivantes pour informer snort des différents réseaux :
+
+**ü ipvar HOME_NET any en ipvar HOME_NET 192.168.50.0/24**: pour définir le réseau
+que nous allons protéger. Dans cet exemple c'est le réseau 192.168.50.0/24, le /24 pour
+préciser le masque de sous réseau.
+
+**ü ipvar EXTERNAL_NET any en ipvar EXTERNAL_NET !$HOME_NET** : pour
+indiquer à snort que tout hôte dont l'adresse IP est différente de l'adresse du réseau
+protégé est un hôte du réseau externe.
+Notons que nous avons la possibilité de définir les adresses des différents serveurs s’ils sont différents du **‘’$HOME_NET’’**.
+
+IMAGE
+
+Notons que nous avons la possibilité de définir les adresses des différents serveurs s’ils sont différents du **‘’$HOME_NET’’**.
+
+**Test de la configuration du fichier de configuration de Snort**
+
+Pour vérifier si nos configurations sont bonnes, nous allons tester Snort avec la commande suivante :
+
+**#snort -T -c /etc/snort/snort.conf**
+
+Si tout va bien, on aura un résultat semblable à celui -ci où nous avons le message ‶snort sccessfully valided the configuration! ″ pour nous informer que nous avons bien configurer Snort.
+
+ IMAGE
+
+ 4.3.2- Test du mode IDS:
+ 
+Pour la réalisation de ce test, nous allons déclarer les protocoles ICMP, Telnet et FTP, comme protocoles suspects afin de tester le système de détection mis en place.
+
+Nous allons ajouter ces règles dans /etc/snort/rules/local.rules :
+
+
+IMAGE 
+
+On enregistre puis on quitte, ensuite on démarre Snort et les outils complémentaires.
+Sur la machine du pirate (192.168.40.129) nous allons dans le terminal pour générer les paquets ICMP, Telnet et FTP pour tester le fonctionnement de Snort.
+
+IMAGE
+
+Pour détecter les alertes dans la console par Snort, on tape dans le terminal de VM1 (machine sur laquelle nous avons installé Snort) la commande suivante :
+
+#Snort -A console -q -c  /etc/snort/snort.conf -I ens33
+
+IMAGE
+
+Sur la figure, nous remarquons que Snort a détecté les paquets Telnet avec le message ‶Telnet connexion″. Nous pouvons conclure que le mode IDS de Snort fonctionne correctement.
+
+
