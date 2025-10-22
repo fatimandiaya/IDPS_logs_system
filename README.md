@@ -81,7 +81,7 @@ Allez, on y va !
  2- Installer le paquet apt-transport-https pour permettre les téléchargements via HTTPS :
 #sudo apt-get install apt-transport-https
 
-IMAGE
+![2](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/2.png)
 
  3- Ajouter le dépôt Elastic à ta liste de sources :
 #echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-8.x.list
@@ -89,8 +89,8 @@ IMAGE
  4- Mettre à jour les paquets et installer Elasticsearch :
 #sudo apt-get update && sudo apt-get install elasticsearch
 
+![6](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/6.png)
 
-IMAGE
 
 ***Attention*** : la sécurité d’Elasticsearch est activée par défaut. Le mot de passe, les certificats et les clés te seront affichés dans le terminal — il faut les sauvegarder quelque part. 
 Comme ici on garde l’installation locale (non accessible depuis l’extérieur), on va désactiver les fonctions de sécurité.
@@ -101,24 +101,24 @@ Comme ici on garde l’installation locale (non accessible depuis l’extérieur
    
   - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
 
-     IMAGE
+    ![8](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/8.png)
 
   - Désactiver la sécurité (changer de true à false) :
 
-     IMAGE
+   ![7](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/7.png)
 
  6- Activer et démarrer Elasticsearch :
 #sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch
 #sudo systemctl status elasticsearch
 
 
-IMAGE
+![9](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/9.png)
 
 
  7- Tester l’API d’Elasticsearch :
 #curl -XGET "localhost:9200"
 
-IMAGE
+![10](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/10.png)
 
 Tu devrais obtenir une réponse JSON contenant des informations sur la version, le cluster, etc.
 Si tu n’as pas cette réponse, vérifie la configuration et les règles du pare-feu (le port 9200 doit être autorisé).
@@ -127,7 +127,7 @@ Si tu n’as pas cette réponse, vérifie la configuration et les règles du par
 ### 3. Installer Logstash
 #sudo apt install logstash
 
-IMAGE
+![11](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/11.png)
 
 
 Pour que Logstash traite correctement les logs que tu enverras via Filebeat, il faut configurer des filtres.
