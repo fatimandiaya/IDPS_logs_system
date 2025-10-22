@@ -392,4 +392,114 @@ IMAGE
 
 Sur la figure, nous remarquons que Snort a détecté les paquets Telnet avec le message ‶Telnet connexion″. Nous pouvons conclure que le mode IDS de Snort fonctionne correctement.
 
+ 4.3.3- Configuration de  Snort en mode IPS
+Pour configurer Snort en tant que IPS, nous avons besoin d'apporter quelques modifications dans snort.conf. Mais avant, il faut vérifier les versions de DAQ installées avec la commande cicontre :
+
+**#snort --daq-list**
+Nous allons ajouter les lignes ciaprès au fichier de configuration de snort (snort.conf)
+
+IMAGE
+Nous allons vérifier la configuration du mode inline (IPS) :
+
+**#snort -T -c /etc/snort/snort.conf -Q -i ens32:ens33**
+ 4.3.4- Test du mode IPS:
+Pour le test du mode IPS on pourra bien simuler une attaque Denial of Service (DoS), mais l’inconvénient est que nous ne pourrons pas l’illustrer de façon claire et concis dans le document. Pour cela nous allons réaliser le test du mode IPS en reprenant le test précèdent en stoppant les paquets ICMP, Telnet et FTP.
+Toujours dans /etc/snort/rules/local.rules, on ajoute les lignes suivantes :
+
+IMAGE
+On enregistre puis on quitte, ensuite on redémarre Snort et les outils complémentaires. Sur la machine du pirate (192.168.40.129) nous allons dans le terminal pour générer les paquets ICMP pour tester le fonctionnement de Snort
+
+IMAGE
+
+**#snort -A console -q -c /etc/snort/snort.conf -I ens32:ens33**
+### V.  Scénarios
+Ces cinq scénarios d’attaque ont été sélectionnés pour leur pertinence opérationnelle, leur diversité technique, et leur capacité à illustrer les capacités de détection et de corrélation d’un pipeline SOC local. Chaque scénario cible une classe de menace différente, permettant de tester :
+-La détection en temps réel par l’IDS/IPS
+-La collecte et centralisation des logs via syslog-ng/Logstash
+-La visualisation et l’analyse dans Kibana
+
+TABLEAU
+
+ **Scénario 1 — Scan de réseau avec Nmap**
+ 
+Simuler une tentative de reconnaissance réseau en utilisant l’outil Nmap pour identifier les ports ouverts et les services actifs sur la machine cible (DVWA).
+Ce type de scan est souvent utilisé en phase préliminaire d’une attaque pour cartographier les services exposés.
+Le scan a été lancé depuis la machine Kali vers DVWA avec la commande suivante : “ nmap -sS -p- 192.168.50.20
+-sS : scan SYN furtif
+-192.168.50.20 : IP de la cible DVWA
+
+IMAGES
+
+**Scénario 2 :  Attaque par brute-force SSH**
+
+Un cybercriminel effectue une tentative d’accès non autorisé à un serveur via le protocole SSH, en utilisant une attaque par brute-force. Ce type d’attaque consiste à tester un grand nombre de combinaisons de login/mot de passe dans un temps court, dans le but de compromettre un compte valide. Outil utilise : Hydra
+
+D’abord nous avions procédé à l’ installation de  ssh sur notre IDS/SIEM
+**#sudo apt update
+#sudo apt install openssh-server
+#Sudo systemctl start ssh
+#Sudo systemctl enable ssh**
+
+IMAGE
+
+Ensuite depuis kali nous avons exécuté : 
+**“ hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.50.20”**
+
+IMAGES
+
+**Scénario 3 : DOS**
+L’attaquant effectue une attaque par déni de service (DoS) en saturant la table de connexions TCP du serveur cible avec des paquets SYN non complétés. Cette technique vise à épuiser les ressources du serveur en initiant un grand nombre de connexions TCP sans jamais les finaliser (absence de ACK), ce qui empêche les connexions légitimes d’être établies.
+
+**Méthode d’attaque** : L’outil utilisé est hping3, configuré pour envoyer un flot rapide de paquets SYN vers le port 80 du serveur cible :
+
+**Commande utilisée**
+**“ sudo hping3 -S -p 80 -i u100 -c 10000 192.168.50.20 “**
+
+**Paramètres** :
+-S : envoie des paquets TCP avec le flag SYN
+-p 80 : cible le port HTTP
+-i u100 : intervalle de 100 microsecondes entre les paquets (très rapide)
+-c 10000 : envoie 10 000 paquets
+**192.168.50.20 : IP de la machine cible**
+
+IMAGES
+
+**Scénario 4 : Détection de malware (EICAR)**
+
+L’attaque simule l’introduction d’un fichier malveillant dans le système cible afin d’évaluer la capacité de l’IDS à détecter une signature connue de malware. Pour ce test, nous utilisons le fichier EICAR, développé par l’European Institute for Computer Antivirus Research. Ce fichier est un standard international utilisé pour tester les antivirus et les systèmes de détection, sans présenter de danger réel pour les systèmes.
+*Méthode utilisée :  depuis notre VM Kali envoie directement la signature ASCII du fichier EICAR vers le port HTTP de la cible DVWA en utilisant **netcat :
+*“ echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' | nc 192.168.50.20 80 "**
+
+Cette commande simule un transfert réseau contenant une charge malveillante, sans passer par un navigateur ou un fichier physique.
+
+IMAGES
+
+Lors de l’envoi de la signature EICAR via le réseau , le serveur Apache retourne une erreur **HTTP 400 Bad Request** car la requête n’est pas conforme au protocole HTTP (pas de méthode *GET, ni d’en-têtes). Ce comportement est typique d’un attaquant qui injecte directement une charge malveillante dans le flux réseau. 
+
+Malgré cette erreur côté serveur, Snort3 détecte la signature EICAR dans le contenu brut du paquet TCP, prouvant que la détection IDS ne dépend pas de la validité HTTP, mais bien de l’analyse du trafic réel.
+
+IMAGES
+
+**Scénario 5 : injection SQL**
+
+Dans ce scénario, nous avons simulé une attaque par injection SQL dans un environnement volontairement vulnérable afin de tester la capacité de notre pipeline Snort + ELK  à détecter ce type de menace. Contrairement aux autres scénarios, ici nous avons utilisé DVWA (Damn Vulnerable Web Application), une application web conçue pour l’apprentissage et la simulation d’attaques. Elle était déployée sur la  VM-Ubuntu-SRV dans notre topologie EVE-NG..
+Pour ce scénario, j’ai utilisé deux types d’injection SQL : contournement d’authentification et reconnaissance de schéma
+-Contournement d’authentification via OR 1=1#
+l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. 
+Payload injecté sur DVWA : 1' OR 1=1#
+
+IMAGES
+
+- Reconnaissance de schéma via “ SHOW TABLES “
+L'objectif de l’attaque est d’injecter la commande SQL SHOW TABLES dans un champ input pour afficher la structure de la base de données cible.
+
+IMAGES
+
+### VI.  Conclusion
+L'objectif principal de ce projet était de concevoir et de mettre en œuvre une solution complète de surveillance , en fusionnant les capacités de la Pile ELK pour la gestion centralisée des logs et de l'outil Snort pour la détection et la prévention d'intrusion.
+Nous avons réussi à établir un environnement où Filebeat assure la collecte des journaux d'activité et leur alimentation pour les ingérer dans la Pile ELK, permettant ainsi leur analyse et leur exploitation visuelle via Kibana. L'efficacité de notre solution a été validée par la configuration de Snort, et par des tests concrets simulant différents scénarios d'attaques, tels que le brute force SSH, la détection de malware EICAR, le scan de réseau, l'injection SQL et la tentative de DoS. Ces démonstrations ont confirmé la capacité de l'architecture à identifier les comportements malveillants et à réagir en conséquence. 
+Pour l'avenir, les perspectives d'amélioration majeures résident dans l'intégration de techniques d'apprentissage automatique pour affiner la détection d'anomalies comportementales et l'ajout d'outils de gestion des vulnérabilités afin d'enrichir le contexte des alertes. 
+En définitive, ce projet fournit une fondation solide et fonctionnelle pour une stratégie de cyberdéfense proactive, essentielle pour la résilience de toute infrastructure face aux menaces numériques contemporaines.
+
+
 
