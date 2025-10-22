@@ -175,11 +175,52 @@ Sur la machine dont tu veux envoyer les logs :
      IMAGE
 
 
-     #sudo dpkg -i filebeat-8.9.2-amd64.deb
+   #sudo dpkg -i filebeat-8.9.2-amd64.deb
      
   2- Ouvrir le fichier de configuration :
     #sudo nano /etc/filebeat/filebeat.yml
 
  IMAGE
 
+ Comme tu vas envoyer les logs à Logstash (et non directement à Elasticsearch), commente la section output.elasticsearch :
+
+ IMAGE
+
+ décommente / active la section output.logstash en indiquant l'adresse IP de ton serveur ELK (au lieu de localhost) :
  
+**output.logstash:**
+  **hosts: ["192.168.50.130:5044"]**
+  
+ 3- Activer et démarrer Filebeat :
+    #sudo systemctl enable filebeat && sudo systemctl start filebeat
+    #sudo systemctl status filebeat
+
+
+IMAGE
+
+ 4- Filebeat fournit des modules prédéfinis pour divers services (Apache, système, etc). Pour les visualiser :
+ 
+#sudo filebeat modules list
+
+Pour nous, on va activer les modules system et apache :
+
+#sudo filebeat modules enable system
+#sudo filebeat modules enable apache
+
+Chaque module correspond à un fichier de configuration dans /etc/filebeat/modules.d/. Ouvre-les et mets enabled: true si ce n’est pas déjà fait. (pense aux questions de format, crochets, guillemets, etc.)
+
+IMAGE
+
+ 5- Charger les modèles d’index dans Elasticsearch (en utilistant l’IP de ton serveur ELK) :
+#sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'
+
+
+IMAGE 
+
+ 6- Charger les tableaux de bord (dashboards) dans Kibana 
+#sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['192.168.40.130:9200'] -E setup.kibana.host=192.168.40.130:5601
+
+IMAGE
+
+
+
