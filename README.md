@@ -212,15 +212,42 @@ Chaque module correspond à un fichier de configuration dans /etc/filebeat/modul
 IMAGE
 
  5- Charger les modèles d’index dans Elasticsearch (en utilistant l’IP de ton serveur ELK) :
-#sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'
+    
+    #sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'
 
 
 IMAGE 
 
  6- Charger les tableaux de bord (dashboards) dans Kibana 
-#sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['192.168.40.130:9200'] -E setup.kibana.host=192.168.40.130:5601
+   
+   #sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['192.168.40.130:9200'] -E setup.kibana.host=192.168.40.130:5601
 
 IMAGE
 
+ 7- Résultat final
+ 
+Si tout s’est bien déroulé, connecte-toi à l’interface Kibana via le navigateur à l’adresse du serveur ELK, dans la section **Discover**, tu devrais voir les données arriver. Tu peux aussi visualiser les flux en direct via le panneau **Observability**.
 
+ 3- Snort
+ 
+ Snort a besoin d’un certain nombre de paquets pour fonctionner. Certains se trouvent dans les dépôts et d’autres devront être installés manuellement en téléchargeant les sources et en les compilant.
+ 
+ 1- Mise à jour du système
+#sudo apt update && sudo apt upgrade -y
+
+ 2- Installer les dépendances nécessaires
+Snort a besoin de plusieurs outils et bibliothèques :
+Pour installer l’ensemble de ces packages, nous allons, depuis le terminal, exécuter la commande suivante :
+
+#apt-get install mysql mysql-bench mysql-server mysql-devel mysqlclient10 php-mysql httpd pcre-devel php-gd gd mod_ssl glib2-devel gcc-c++ libpcap-devel php php-pear apt-get-utils gcc flex bison zlib* libpcap* pcre* libdnet libdnet-devel tcpdump
+ 
+Une fois l’installation des prérequis de Snort terminée, nous allons effectuer l’installation de la bibliothèque d’acquisition de données.
+
+ 3- Installation de la bibliothèque d’acquisition de données (DAQ)
+Snort utilise la bibliothèque d'acquisition de données (DAQ) pour extraire les appels vers les bibliothèques de capture de paquets. Pour commencer l'installation, nous allons créer un dossier d'installation qui contiendra nos fichiers tarball (fichiers d’archives) téléchargés. À partir d’un terminal nous allons télécharger et installer le paquet de DAQ. Création du répertoire ‶snort_src/″
+#mkdir ~/snort_src
+On entre dans le répertoire créé avec la commande suivante :
+#cd ~/snort_src/
+Ensuite on télécharge le daq-2.0.6 avec la commande ci-contre :
+#wget https://snort.org/downloads/snort/daq-2.0.6.tar.gz
 
