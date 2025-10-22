@@ -436,9 +436,15 @@ Le scan a été lancé depuis la machine Kali vers DVWA avec la commande suivant
 -sS : scan SYN furtif
 -192.168.50.20 : IP de la cible DVWA
 
+Sur la machine Kali, nous avons lancé un scan réseau avec Nmap afin d’identifier les hôtes actifs et les ports ouverts :
 ![S11](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap1.png)
+
+Snort a bien intercepté les paquets SYN répétés et a généré des alertes dans le fichier de logs "alert_json.txt"
 ![S12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap2.png)
+
+Dans Kibana, on retrouve cette alerte avec le message “Scan Nmap SYN détecté”, l’IP source de Kali, et l’IP cible DVWA.
 ![S13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap3.png)
+Cela confirme que le scan a été détecté comme une tentative de reconnaissance réseau, grâce à la règle sid:1000101.
 ![S14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap4.png)
 
 
@@ -459,9 +465,13 @@ Ensuite depuis kali nous avons exécuté :
 **“ hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.50.20”**
 
 ![36](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh2.png)
+Snort a détecté un nombre élevé de connexions SSH en peu de temps et a généré des alertes.
 ![S21](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh3.png)
+Sur Kibana, on voit clairement l’alerte “Brute-force SSH détecté”, avec l’IP source de Kali et le port 22 ciblé.
 ![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh4.png)
+La règle sid:1000201 s’est déclenchée après 10 connexions en moins de 60 secondes, ce qui valide la détection.
 ![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh5.png)
+
 
 
 
@@ -480,10 +490,15 @@ L’attaquant effectue une attaque par déni de service (DoS) en saturant la tab
 -c 10000 : envoie 10 000 paquets
 **192.168.50.20 : IP de la machine cible**
 
+Sur cette première capture, on voit qu'on a exécuté la commande hping3 depuis Kali. Le terminal affiche l’envoi massif de paquets SYN vers le port 80 de DVWA.
 ![S31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos1.png)
+Ensuite, dans le fichier alert_json.txt sur la machine IDS, on voit que Snort3 a bien généré une alerte avec le message “Déni de service - SYN flood détecté”
 ![S32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos2.png)
+Sur Kibana, l’alerte est bien visible. On retrouve l’IP source de Kali, l’IP cible DVWA, le port 80, et le SID de la règle.
 ![S33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos3.png)
+Cela confirme que le trafic SYN non complété a été détecté comme une tentative de saturation TCP, typique d’un DoS.
 ![S34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos4.png)
+Le serveur n’a pas répondu aux paquets SYN envoyés par l’attaquant, car ceux-ci n’étaient pas suivis d’un ACK, empêchant l’établissement complet des connexions TCP. Ce comportement a été intercepté par Snort, qui a reconnu le flot massif de paquets SYN non finalisés comme une attaque par déni de service. La visualisation dans Kibana permet ensuite de confirmer l’origine de l’attaque, le type de trafic observé, ainsi que la règle de détection déclenchée.
 
 
 **Scénario 4 : Détection de malware (EICAR)**
@@ -501,31 +516,45 @@ Lors de l’envoi de la signature EICAR via le réseau , le serveur Apache retou
 Malgré cette erreur côté serveur, Snort3 détecte la signature EICAR dans le contenu brut du paquet TCP, prouvant que la détection IDS ne dépend pas de la validité HTTP, mais bien de l’analyse du trafic réel.
 
 ![S42](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar2.png)
+
+Dans Kibana, on retrouve l’alerte générée par Snort avec le message “Malware détecté — Fichier EICAR”. Les métadonnées que nous avons configurées précédemment permettent d’afficher clairement l’IP source (la machine Kali), l’IP cible (DVWA), le port 80 utilisé pour l’attaque, ainsi que le SID de la règle déclenchée. Cela confirme que la détection fonctionne correctement et que l’alerte est bien remontée dans la chaîne de logs.
 ![S43](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar3.png)
 ![S44](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar4.png)
 
 **Scénario 5 : injection SQL**
 
-Dans ce scénario, nous avons simulé une attaque par injection SQL dans un environnement volontairement vulnérable afin de tester la capacité de notre pipeline Snort + ELK  à détecter ce type de menace. Contrairement aux autres scénarios, ici nous avons utilisé DVWA (Damn Vulnerable Web Application), une application web conçue pour l’apprentissage et la simulation d’attaques. Elle était déployée sur la  VM-Ubuntu-SRV dans notre topologie EVE-NG..
-Pour ce scénario, j’ai utilisé deux types d’injection SQL : contournement d’authentification et reconnaissance de schéma
--Contournement d’authentification via OR 1=1#
-l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. 
-Payload injecté sur DVWA : 1' OR 1=1#
+Dans ce scénario, j’ai simulé une attaque par injection SQL dans un environnement volontairement vulnérable afin de tester la capacité de notre pipeline Snort + ELK à détecter ce type de menace. Comme pour les autres scénarios, la cible reste la machine Ubuntu-SRV, mais cette fois-ci, l’attaque vise spécifiquement DVWA (Damn Vulnerable Web Application), une application web conçue pour l’apprentissage et la simulation d’attaques. DVWA est déployée sur la VM Ubuntu-SRV au sein de notre topologie EVE-NG.
+Pour ce scénario, on a utilisé deux types d’injection SQL : contournement d’authentification et reconnaissance de schéma
+  - 1. Contournement d’authentification via OR 1=1#
+l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. Ainsi l'attaquant contourne la vérification des identifiants et d’accéder à l’application sans mot de passe valide.
 
+Sur kali, on accede a l'interface de DVWA , puis sur la section "SQL injectio" et au niveau du champ iput "user ID" on va injecté le payload : `1' OR 1=1#`
 ![S51](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql1.png)
+
+Sur DVWA, la requête renvoie tous les enregistrements de la table des utilisateurs, contournant ainsi l'authentification ou les contrôles d'accès.
 ![S52](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql2.png)
+
+Snort a intercepté la requête encodée par le navigateur  et a généré une alerte dans le fichier alert_json.txt, confirmant que la tentative d’injection a bien été détectée.
 ![S53](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql3.png)
+
+Dans Kibana, on retrouve l’alerte avec le message “Injection SQL — OR 1=1 détectée”, l’IP source de Kali, l’IP cible DVWA, le port HTTP, et le SID de la règle.
 ![S54](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql4.png)
 ![S54](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql5.png)
+Cela montre que notre pipeline Snort + ELK est capable de détecter les injections même lorsqu’elles sont encodées côté client.
 
-- Reconnaissance de schéma via “ SHOW TABLES “
+- 2. Reconnaissance de schéma via “ SHOW TABLES “
 L'objectif de l’attaque est d’injecter la commande SQL SHOW TABLES dans un champ input pour afficher la structure de la base de données cible.
 
+Toujours au niveau du champ input "user ID" on injecte la commande ` 1``SHOW TABLES--`
 ![S55](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql6.png)
+Snort a détecté cette tentative d’exploration de la base de données et a généré une alerte spécifique dans alert_json.txt.
 ![S56](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql7.png)
+
+Sur Kibana, l’alerte apparaît avec le message “Injection SQL — SHOW TABLES détectée”, les IPs source et destination, et le SID correspondant.
+
 ![S57](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql8.png)
 ![S57](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql9.png)
-
+Cette détection confirme que notre IDS est capable a la fois capables d’intercepter des requêtes SQL orientées reconnaissance, et les bypass d’authentification.
 
 
 
