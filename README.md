@@ -436,6 +436,7 @@ Le scan a été lancé depuis la machine Kali vers DVWA avec la commande suivant
 -sS : scan SYN furtif
 -192.168.50.20 : IP de la cible DVWA
 
+![S11](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap1.png)
 ![S12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S12.png)
 ![S13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S13.png)
 ![S14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S14.png)
