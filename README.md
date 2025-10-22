@@ -239,15 +239,33 @@ Si tout s’est bien déroulé, connecte-toi à l’interface Kibana via le navi
 Snort a besoin de plusieurs outils et bibliothèques :
 Pour installer l’ensemble de ces packages, nous allons, depuis le terminal, exécuter la commande suivante :
 
-#apt-get install mysql mysql-bench mysql-server mysql-devel mysqlclient10 php-mysql httpd pcre-devel php-gd gd mod_ssl glib2-devel gcc-c++ libpcap-devel php php-pear apt-get-utils gcc flex bison zlib* libpcap* pcre* libdnet libdnet-devel tcpdump
- 
+ #apt-get install mysql mysql-bench mysql-server mysql-devel mysqlclient10 php-mysql httpd pcre-devel php-gd gd mod_ssl glib2-devel gcc-c++ libpcap-devel php php-pear apt-get-utils gcc flex bison zlib* libpcap* pcre* libdnet libdnet-devel tcpdump
+  
 Une fois l’installation des prérequis de Snort terminée, nous allons effectuer l’installation de la bibliothèque d’acquisition de données.
 
  3- Installation de la bibliothèque d’acquisition de données (DAQ)
+ 
 Snort utilise la bibliothèque d'acquisition de données (DAQ) pour extraire les appels vers les bibliothèques de capture de paquets. Pour commencer l'installation, nous allons créer un dossier d'installation qui contiendra nos fichiers tarball (fichiers d’archives) téléchargés. À partir d’un terminal nous allons télécharger et installer le paquet de DAQ. Création du répertoire ‶snort_src/″
-#mkdir ~/snort_src
+
+ #mkdir ~/snort_src
+
 On entre dans le répertoire créé avec la commande suivante :
-#cd ~/snort_src/
+
+ #cd ~/snort_src/
+
 Ensuite on télécharge le daq-2.0.6 avec la commande ci-contre :
-#wget https://snort.org/downloads/snort/daq-2.0.6.tar.gz
+
+ #wget https://snort.org/downloads/snort/daq-2.0.6.tar.gz
+
+On constate que le fichier téléchargé est un fichier compressé (extension.tar.gz), pour cela on le décompresse avec la commande ci-dessous :
+ 
+ #tar -xvzf daq-2.0.6.tar.gz
+ 
+Et enfin on procède à l’installation du daq-2.0.6 avec les commandes suivantes :
+ #cd daq-2.0.6/
+ #./configure
+ #make && make install
+  
+ Maintenant que nous avons fait le nécessaire en installant les prérequis de Snort, nous allons installer snort-2.9.15.1
+ 
 
