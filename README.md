@@ -480,10 +480,10 @@ L’attaquant effectue une attaque par déni de service (DoS) en saturant la tab
 -c 10000 : envoie 10 000 paquets
 **192.168.50.20 : IP de la machine cible**
 
-![S31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S31.png)
-![S32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S32.png)
-![S33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S33.png)
-![S34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S34.png)
+![S31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos1.png)
+![S32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos2.png)
+![S33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos3.png)
+![S34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos4.png)
 
 
 **Scénario 4 : Détection de malware (EICAR)**
@@ -494,15 +494,15 @@ L’attaque simule l’introduction d’un fichier malveillant dans le système 
 
 Cette commande simule un transfert réseau contenant une charge malveillante, sans passer par un navigateur ou un fichier physique.
 
-![S41](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S41.png)
+![S41](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar1.png)
 
 Lors de l’envoi de la signature EICAR via le réseau , le serveur Apache retourne une erreur **HTTP 400 Bad Request** car la requête n’est pas conforme au protocole HTTP (pas de méthode *GET, ni d’en-têtes). Ce comportement est typique d’un attaquant qui injecte directement une charge malveillante dans le flux réseau. 
 
 Malgré cette erreur côté serveur, Snort3 détecte la signature EICAR dans le contenu brut du paquet TCP, prouvant que la détection IDS ne dépend pas de la validité HTTP, mais bien de l’analyse du trafic réel.
 
-![S42](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S42.png)
-![S43](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S43.png)
-![S44](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S44.png)
+![S42](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar2.png)
+![S43](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar3.png)
+![S44](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar4.png)
 
 **Scénario 5 : injection SQL**
 
@@ -512,18 +512,21 @@ Pour ce scénario, j’ai utilisé deux types d’injection SQL : contournement 
 l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. 
 Payload injecté sur DVWA : 1' OR 1=1#
 
-![S51](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S51.png)
-![S52](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S52.png)
-![S53](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S53.png)
-![S54](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S54.png)
-
+![S51](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql1.png)
+![S52](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql2.png)
+![S53](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql3.png)
+![S54](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql4.png)
+![S54](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql5.png)
 
 - Reconnaissance de schéma via “ SHOW TABLES “
 L'objectif de l’attaque est d’injecter la commande SQL SHOW TABLES dans un champ input pour afficher la structure de la base de données cible.
 
-![S55](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S55.png)
-![S56](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S56.png)
-![S57](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S57.png)
+![S55](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql6.png)
+![S56](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql7.png)
+![S57](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql8.png)
+![S57](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql9.png)
+
+
 
 
 
