@@ -96,10 +96,35 @@ IMAGE
 Comme ici on garde l’installation locale (non accessible depuis l’extérieur), on va désactiver les fonctions de sécurité.
 
  5- Modifier le fichier de configuration d’Elasticsearch :
-
-   #sudo nano /etc/elasticsearch/elasticsearch.yml
+  #sudo nano /etc/elasticsearch/elasticsearch.yml
    
-     - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
+  - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
 
-         IMAGE
+     IMAGE
+
+  - Désactiver la sécurité (changer de true à false) :
+
+     IMAGE
+
+ 6- Activer et démarrer Elasticsearch :
+#sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch
+#sudo systemctl status elasticsearch
+
+
+IMAGE
+
+
+ 7- Tester l’API d’Elasticsearch :
+#curl -XGET "localhost:9200"
+
+IMAGE
+
+Tu devrais obtenir une réponse JSON contenant des informations sur la version, le cluster, etc.
+Si tu n’as pas cette réponse, vérifie la configuration et les règles du pare-feu (le port 9200 doit être autorisé).
+
+--- 
+
+### 3. Installer Logstash
+#sudo apt install logstash
+
 
