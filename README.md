@@ -528,8 +528,10 @@ L'objectif de l’attaque est d’injecter la commande SQL SHOW TABLES dans un c
 
 ### VI.  Conclusion
 L'objectif principal de ce projet était de concevoir et de mettre en œuvre une solution complète de surveillance , en fusionnant les capacités de la Pile ELK pour la gestion centralisée des logs et de l'outil Snort pour la détection et la prévention d'intrusion.
+
 Nous avons réussi à établir un environnement où Filebeat assure la collecte des journaux d'activité et leur alimentation pour les ingérer dans la Pile ELK, permettant ainsi leur analyse et leur exploitation visuelle via Kibana. L'efficacité de notre solution a été validée par la configuration de Snort, et par des tests concrets simulant différents scénarios d'attaques, tels que le brute force SSH, la détection de malware EICAR, le scan de réseau, l'injection SQL et la tentative de DoS. Ces démonstrations ont confirmé la capacité de l'architecture à identifier les comportements malveillants et à réagir en conséquence. 
 Pour l'avenir, les perspectives d'amélioration majeures résident dans l'intégration de techniques d'apprentissage automatique pour affiner la détection d'anomalies comportementales et l'ajout d'outils de gestion des vulnérabilités afin d'enrichir le contexte des alertes. 
+
 En définitive, ce projet fournit une fondation solide et fonctionnelle pour une stratégie de cyberdéfense proactive, essentielle pour la résilience de toute infrastructure face aux menaces numériques contemporaines.
 
 
