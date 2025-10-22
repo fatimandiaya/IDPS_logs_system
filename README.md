@@ -95,7 +95,7 @@ IMAGE
 Comme ici on garde l’installation locale (non accessible depuis l’extérieur), on va désactiver les fonctions de sécurité.
 
  5- Modifier le fichier de configuration d’Elasticsearch :
-#sudo nano /etc/elasticsearch/elasticsearch.yml
+ #sudo nano /etc/elasticsearch/elasticsearch.yml
    
   - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
 
@@ -212,7 +212,7 @@ IMAGE
 
  5- Charger les modèles d’index dans Elasticsearch (en utilistant l’IP de ton serveur ELK) :
     
-    #sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'
+  #sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'
 
 
 IMAGE 
