@@ -37,8 +37,9 @@ Filebeat est un agent léger de collecte de logs. Son rôle est de surveiller en
 Snort est un système de détection et de prévention d’intrusions (IDS/IPS) open source.
 Il analyse le trafic réseau en temps réel à la recherche de comportements suspects, d’attaques ou d’anomalies à l’aide de signatures et de règles définies.
 Lorsqu’une menace est détectée, Snort génère une alerte qui est ensuite envoyée vers Filebeat, puis intégrée dans Elasticsearch pour être visualisée dans Kibana.
+
 ![Snort](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/Snort.jpg)
-IMAGE
+
 
 ## III. Architecture d’implémentation
 
@@ -49,7 +50,7 @@ Pour parfaire à ce projet, nous avions mis en place une architecture virtualis�
  - Une machine simple ( windows / linux) (qui jouera le rôle de la cible en fonction du scénario)
  - Une machine serveur
 
-IMAGE
+![Archi](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/Archi.png))
  
 ## IV. Installation & configuration
 
