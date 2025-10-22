@@ -55,8 +55,7 @@ IMAGE
 
   ### 1. ELK
   
-Installer la suite Elastic (ELK) 8.x sur Ubuntu 22.04 LTS
-(Y compris l’installation et la configuration de Filebeat pour l’envoi de logs)
+**Installer la suite Elastic (ELK) 8.x sur Ubuntu 22.04 LTS**
 
 Autrefois appelée ELK Stack, la suite Elastic est un ensemble d’outils puissants pour la gestion et l’analyse des logs : ElasticSearch (moteur d’analyse), Logstash (pipeline de traitement des données) et Kibana (outil de visualisation). Cette suite te permettra de visualiser des logs en quelques minutes.
 
@@ -135,7 +134,7 @@ Sinon, tu risques de voir dans Kibana que tu as des données, mais vides.
  1. Créer un fichier de filtre :
 #sudo nano /etc/logstash/conf.d/beats.conf
 
- 3. Activer et démarrer Logstash :
+ 2. Activer et démarrer Logstash :
 #sudo systemctl enable logstash && sudo systemctl start logstash
 #sudo systemctl status logstash
 
@@ -228,12 +227,12 @@ IMAGE
  
 Si tout s’est bien déroulé, connecte-toi à l’interface Kibana via le navigateur à l’adresse du serveur ELK, dans la section **Discover**, tu devrais voir les données arriver. Tu peux aussi visualiser les flux en direct via le panneau **Observability**.
 
- 3- Snort
+ ### 3. Snort
  
  Snort a besoin d’un certain nombre de paquets pour fonctionner. Certains se trouvent dans les dépôts et d’autres devront être installés manuellement en téléchargeant les sources et en les compilant.
  
  1- Mise à jour du système
-#sudo apt update && sudo apt upgrade -y
+  #sudo apt update && sudo apt upgrade -y
 
  2- Installer les dépendances nécessaires
 Snort a besoin de plusieurs outils et bibliothèques :
@@ -262,10 +261,77 @@ On constate que le fichier téléchargé est un fichier compressé (extension.ta
  #tar -xvzf daq-2.0.6.tar.gz
  
 Et enfin on procède à l’installation du daq-2.0.6 avec les commandes suivantes :
+ 
  #cd daq-2.0.6/
  #./configure
  #make && make install
   
  Maintenant que nous avons fait le nécessaire en installant les prérequis de Snort, nous allons installer snort-2.9.15.1
  
+ 4- Installation de snort 2.9.15.1
 
+Pour installer Snort, nous allons effectuer les mêmes actions que nous avons effectuées lors de l’installation précédente. À partir du terminal, nous allons exécuter les commandes suivantes :
+
+**# cd ~/snort_src/
+#wget https://snort.org/downloads/snort/snort-2.9.15.1.tar.gz
+#tar -xvzf snort-2.9.15.1.tar.gz
+#cd snort-2.9.15.1/
+#./configure --enable-sourcefire
+#make && make install**
+ 
+Ensuite, nous allons créer des fichiers et dossiers dont Snort aura besoin lorsqu'il sera exécuté. Nous attribuons la propriété de ces fichiers à l’utilisateur snort.
+
+**-/etc/snort**, pour les fichiers de configurations de Snort
+
+**-/etc/ snort/rules et /usr/local/lib/snort_dynamicrules**, pour les règles de Snort **-/var/log/snort** : dossier de journalisation de Snort.
+
+Pour cela on exécute les commandes suivantes depuis un terminal :
+ 
+**#mkdir /etc/snort
+#mkdir /etc/snort/rules
+#mkdir /usr/local/lib/snort_dynamicrules
+#mkdir /var/log/snort**
+
+On crée les fichiers qui vont nous permettre d’éditer nos propres règles pour Snort avec les commandes ci-contre :
+ 
+**#touch /etc/snort/rules/white_list.rules
+#touch /etc/snort/rules/black_list.rules /etc/snort/rules/local.rules**
+
+Nous allons attribuer les permissions d’écriture, de lecture et d’exécution sur les répertoires et fichiers créés :
+ 
+**#chmod -R 777 /etc/snort
+#chmod -R 777 /var/log/snort
+#chmod -R 777 /usr/local/lib/snort_dynamicrules**
+
+On copie tous les fichiers ayant pour extension .conf et .map du répertoire **‶~/snort_src/snort- 2.9.15.1/etc/″** vers **‶/etc/snort/″** (le répertoire de configuration de snort que nous venons de créer) avec les commande ci-dessous :
+ 
+**#cp ~/snort_src/snort-2.9.15.1/etc/*.conf* /etc/snort
+#cp ~/snort_src/snort-2.9.15.1/etc/*.map /etc/snort**
+
+Maintenant, nous allons vérifier si Snort est bien installé avec la commande **‶snort -V″** depuis le terminal :
+
+IMAGE
+
+4.1- Installation des règles
+
+Les règles de Snort sont des instructions ou codes qui décrivent les signatures des virus, des sites web malveillants, des logiciels dangereux, des intrusions, des attaques et des paquets suspects. Pour installer les règles Snort, nous devons nous inscrire sur le site officiel de Snort https://www.snort.org ou plus précisément à l’URL https://www.snort.org/users/sign_up. Ensuite, nous serons en mesure de télécharger les règles pour la configuration de Snort. Une fois inscrit sur le site, nous pouvons télécharger les règles et continuer l’installation. Nous allons ensuite le décompresser dans /etc/snort pour que les répertoires et fichiers nécessaires soient directement disponibles pour Snort. Avec la commande suivante, nous allons décompresser (commande tar) le fichier téléchargé et le mettre dans /etc/snort (l’utilisation de l’option -C puis en indiquant le répertoire de destination) :
+
+**# tar -xvzf snortrules-snapshot-29110.tar -C /etc/snort**
+ 
+4.2-  Installation de Oinkmaster
+
+Oinkmaster est un script écrit avec le langage de programmation PERL par l’éditeur du logiciel qui va nous servir à mettre jour les fichiers de règles qui sont présents dans /etc/snort/rules. Pour permettre à Oinkmaster de télécharger les règles de Snort, nous avons besoin de le configurer en synchronisation avec le site officiel de Snort. Pour cela nous avons besoin d’une clé appelé « Oink code » sur le site de Snort. Après enregistrement notre « Oink code » est .Nous allons à présent mettre en place Oinkmaster.
+
+IMAGE
+
+Nous allons vérifier si Oinkmaster est bien installé avec la commande **oinkmaster.pl -V**
+
+**#oinkmaster.pl -V**
+
+IMAGE
+
+Nous allons éditer le fichier :
+
+**#vi /etc/oinkmaster.conf**
+
+IMAGE
