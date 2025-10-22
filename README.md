@@ -330,13 +330,14 @@ Nous allons vérifier si Oinkmaster est bien installé avec la commande **oinkma
 
 **#oinkmaster.pl -V**
 
-IMAGE
+ ![24](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/24.png)
 
 Nous allons éditer le fichier :
 
 **#vi /etc/oinkmaster.conf**
 
-IMAGE
+ ![25](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/25.png)
+
 
 4.3 - Configuration de Snort 
 
@@ -357,7 +358,8 @@ indiquer à snort que tout hôte dont l'adresse IP est différente de l'adresse 
 protégé est un hôte du réseau externe.
 Notons que nous avons la possibilité de définir les adresses des différents serveurs s’ils sont différents du **‘’$HOME_NET’’**.
 
-IMAGE
+ ![27](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/27.png)
+
 
 Notons que nous avons la possibilité de définir les adresses des différents serveurs s’ils sont différents du **‘’$HOME_NET’’**.
 
@@ -369,7 +371,8 @@ Pour vérifier si nos configurations sont bonnes, nous allons tester Snort avec 
 
 Si tout va bien, on aura un résultat semblable à celui -ci où nous avons le message ‶snort sccessfully valided the configuration! ″ pour nous informer que nous avons bien configurer Snort.
 
- IMAGE
+  ![Image5](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/Image5.png)
+
 
  4.3.2- Test du mode IDS:
  
@@ -378,18 +381,17 @@ Pour la réalisation de ce test, nous allons déclarer les protocoles ICMP, Teln
 Nous allons ajouter ces règles dans /etc/snort/rules/local.rules :
 
 
-IMAGE 
+ ![28](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/28.png)
+
 
 On enregistre puis on quitte, ensuite on démarre Snort et les outils complémentaires.
 Sur la machine du pirate (192.168.40.129) nous allons dans le terminal pour générer les paquets ICMP, Telnet et FTP pour tester le fonctionnement de Snort.
-
-IMAGE
-
 Pour détecter les alertes dans la console par Snort, on tape dans le terminal de VM1 (machine sur laquelle nous avons installé Snort) la commande suivante :
 
 #Snort -A console -q -c  /etc/snort/snort.conf -I ens33
 
-IMAGE
+ ![29](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/29.png)
+
 
 Sur la figure, nous remarquons que Snort a détecté les paquets Telnet avec le message ‶Telnet connexion″. Nous pouvons conclure que le mode IDS de Snort fonctionne correctement.
 
@@ -399,7 +401,8 @@ Pour configurer Snort en tant que IPS, nous avons besoin d'apporter quelques mod
 **#snort --daq-list**
 Nous allons ajouter les lignes ciaprès au fichier de configuration de snort (snort.conf)
 
-IMAGE
+ ![31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/31.png)
+
 Nous allons vérifier la configuration du mode inline (IPS) :
 
 **#snort -T -c /etc/snort/snort.conf -Q -i ens32:ens33**
@@ -407,12 +410,17 @@ Nous allons vérifier la configuration du mode inline (IPS) :
 Pour le test du mode IPS on pourra bien simuler une attaque Denial of Service (DoS), mais l’inconvénient est que nous ne pourrons pas l’illustrer de façon claire et concis dans le document. Pour cela nous allons réaliser le test du mode IPS en reprenant le test précèdent en stoppant les paquets ICMP, Telnet et FTP.
 Toujours dans /etc/snort/rules/local.rules, on ajoute les lignes suivantes :
 
-IMAGE
+ ![32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/32.png)
+
 On enregistre puis on quitte, ensuite on redémarre Snort et les outils complémentaires. Sur la machine du pirate (192.168.40.129) nous allons dans le terminal pour générer les paquets ICMP pour tester le fonctionnement de Snort
 
-IMAGE
+ ![33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/33.png)
+
 
 **#snort -A console -q -c /etc/snort/snort.conf -I ens32:ens33**
+
+ ![34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/34.png)
+
 ### V.  Scénarios
 Ces cinq scénarios d’attaque ont été sélectionnés pour leur pertinence opérationnelle, leur diversité technique, et leur capacité à illustrer les capacités de détection et de corrélation d’un pipeline SOC local. Chaque scénario cible une classe de menace différente, permettant de tester :
 -La détection en temps réel par l’IDS/IPS
