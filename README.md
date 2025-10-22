@@ -427,7 +427,6 @@ Ces cinq scénarios d’attaque ont été sélectionnés pour leur pertinence op
 -La collecte et centralisation des logs via syslog-ng/Logstash
 -La visualisation et l’analyse dans Kibana
 
-TABLEAU
 
  **Scénario 1 — Scan de réseau avec Nmap**
  
@@ -437,7 +436,11 @@ Le scan a été lancé depuis la machine Kali vers DVWA avec la commande suivant
 -sS : scan SYN furtif
 -192.168.50.20 : IP de la cible DVWA
 
-IMAGES
+![S11](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S11.png)
+![S12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S12.png)
+![S13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S13.png)
+![S14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S14.png)
+
 
 **Scénario 2 :  Attaque par brute-force SSH**
 
@@ -449,12 +452,17 @@ D’abord nous avions procédé à l’ installation de  ssh sur notre IDS/SIEM
 #Sudo systemctl start ssh
 #Sudo systemctl enable ssh**
 
-IMAGE
+![35](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/35.png)
+
 
 Ensuite depuis kali nous avons exécuté : 
 **“ hydra -l admin -P /usr/share/wordlists/rockyou.txt ssh://192.168.50.20”**
 
-IMAGES
+![36](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/36.png)
+![S21](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S21.png)
+![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S22.png)
+
+
 
 **Scénario 3 : DOS**
 L’attaquant effectue une attaque par déni de service (DoS) en saturant la table de connexions TCP du serveur cible avec des paquets SYN non complétés. Cette technique vise à épuiser les ressources du serveur en initiant un grand nombre de connexions TCP sans jamais les finaliser (absence de ACK), ce qui empêche les connexions légitimes d’être établies.
@@ -471,7 +479,11 @@ L’attaquant effectue une attaque par déni de service (DoS) en saturant la tab
 -c 10000 : envoie 10 000 paquets
 **192.168.50.20 : IP de la machine cible**
 
-IMAGES
+![S31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S31.png)
+![S32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S32.png)
+![S33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S33.png)
+![S34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S34.png)
+
 
 **Scénario 4 : Détection de malware (EICAR)**
 
@@ -481,13 +493,15 @@ L’attaque simule l’introduction d’un fichier malveillant dans le système 
 
 Cette commande simule un transfert réseau contenant une charge malveillante, sans passer par un navigateur ou un fichier physique.
 
-IMAGES
+![S41](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S41.png)
 
 Lors de l’envoi de la signature EICAR via le réseau , le serveur Apache retourne une erreur **HTTP 400 Bad Request** car la requête n’est pas conforme au protocole HTTP (pas de méthode *GET, ni d’en-têtes). Ce comportement est typique d’un attaquant qui injecte directement une charge malveillante dans le flux réseau. 
 
 Malgré cette erreur côté serveur, Snort3 détecte la signature EICAR dans le contenu brut du paquet TCP, prouvant que la détection IDS ne dépend pas de la validité HTTP, mais bien de l’analyse du trafic réel.
 
-IMAGES
+![S42](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S42.png)
+![S43](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S43.png)
+![S44](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S44.png)
 
 **Scénario 5 : injection SQL**
 
@@ -497,12 +511,20 @@ Pour ce scénario, j’ai utilisé deux types d’injection SQL : contournement 
 l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. 
 Payload injecté sur DVWA : 1' OR 1=1#
 
-IMAGES
+![S51](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S51.png)
+![S52](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S52.png)
+![S53](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S53.png)
+![S54](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S54.png)
+
 
 - Reconnaissance de schéma via “ SHOW TABLES “
 L'objectif de l’attaque est d’injecter la commande SQL SHOW TABLES dans un champ input pour afficher la structure de la base de données cible.
 
-IMAGES
+![S55](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S55.png)
+![S56](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S56.png)
+![S57](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/S57.png)
+
+
 
 ### VI.  Conclusion
 L'objectif principal de ce projet était de concevoir et de mettre en œuvre une solution complète de surveillance , en fusionnant les capacités de la Pile ELK pour la gestion centralisée des logs et de l'outil Snort pour la détection et la prévention d'intrusion.
