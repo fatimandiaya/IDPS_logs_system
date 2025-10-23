@@ -205,7 +205,7 @@ output.logstash:
   hosts: ["192.168.50.130:5044"]
 ```
   
- #### 5.3 - Activer et démarrer Filebeat : 
+`#### 5.3 - Activer et démarrer Filebeat : 
 ```bash
   # sudo systemctl enable filebeat && sudo systemctl start filebeat
   # sudo systemctl status filebeat
@@ -214,43 +214,43 @@ output.logstash:
 
  ![17](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/17.png)
 
- #### 5.4 - Filebeat fournit des modules prédéfinis pour divers services (Apache, système, etc). Pour les visualiser :
+  #### 5.4 - Filebeat fournit des modules prédéfinis pour divers services (Apache, système, etc). Pour les visualiser :
  
-`#sudo filebeat modules list`
+`# sudo filebeat modules list`
 
 Pour nous, on va activer les modules system et apache :
 
-`#sudo filebeat modules enable system`
-`#sudo filebeat modules enable apache`
+`# sudo filebeat modules enable system`
+`# sudo filebeat modules enable apache`
 
 Chaque module correspond à un fichier de configuration dans /etc/filebeat/modules.d/. Ouvre-les et mets enabled: true si ce n’est pas déjà fait. (pense aux questions de format, crochets, guillemets, etc.)
 
  ![FLB3](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/FLB3.png)
 
- #### 5.5 - Charger les modèles d’index dans Elasticsearch (en utilistant l’IP de ton serveur ELK) :
+   #### 5.5 - Charger les modèles d’index dans Elasticsearch (en utilistant l’IP de ton serveur ELK) :
     
-  `#sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'`
+  `# sudo filebeat setup --index-management -E output.logstash.enabled=false -E 'output.elasticsearch.hosts=["192.168.40.130:9200"]'`
 
  ![19](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/19.png)
 
- #### 5.6 - Charger les tableaux de bord (dashboards) dans Kibana 
+  #### 5.6 - Charger les tableaux de bord (dashboards) dans Kibana 
    
   `#sudo filebeat setup -E output.logstash.enabled=false -E output.elasticsearch.hosts=['192.168.40.130:9200'] -E setup.kibana.host=192.168.40.130:5601`
 
  ![20](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/20.png)
 
- #### 5.7 - Résultat final
+  #### 5.7 - Résultat final
  
 Enfin, on se connecte  à l’interface Kibana via le navigateur à l’adresse du serveur ELK, dans la section **Discover**, on devrais voir les données arriver. 
 
- ### 6. Snort
+### 6. Snort
  
  Snort a besoin d’un certain nombre de paquets pour fonctionner. Certains se trouvent dans les dépôts et d’autres devront être installés manuellement en téléchargeant les sources et en les compilant.
  
- #### 6.1 - Mise à jour du système
-  #sudo apt update && sudo apt upgrade -y
+  #### 6.1 - Mise à jour du système
+  `# sudo apt update && sudo apt upgrade -y`
 
- #### 6.2 - Installer les dépendances nécessaires
+  #### 6.2 - Installer les dépendances nécessaires
 Snort a besoin de plusieurs outils et bibliothèques :
 Pour installer l’ensemble de ces packages, nous allons, depuis le terminal, exécuter la commande suivante :
 
@@ -258,29 +258,23 @@ Pour installer l’ensemble de ces packages, nous allons, depuis le terminal, ex
   
 Une fois l’installation des prérequis de Snort terminée, nous allons effectuer l’installation de la bibliothèque d’acquisition de données.
 
- #### 6.3 - Installation de la bibliothèque d’acquisition de données (DAQ)
+  #### 6.3 - Installation de la bibliothèque d’acquisition de données (DAQ)
  
-Snort utilise la bibliothèque d'acquisition de données (DAQ) pour extraire les appels vers les bibliothèques de capture de paquets. Pour commencer l'installation, nous allons créer un dossier d'installation qui contiendra nos fichiers tarball (fichiers d’archives) téléchargés. À partir d’un terminal nous allons télécharger et installer le paquet de DAQ. Création du répertoire ‶snort_src/″
+Snort utilise la bibliothèque d'acquisition de données (DAQ) pour extraire les appels vers les bibliothèques de capture de paquets. Pour commencer l'installation, nous allons créer un dossier d'installation qui contiendra nos fichiers tarball (fichiers d’archives) téléchargés. À partir d’un terminal nous allons télécharger et installer le paquet de DAQ. 
+Création du répertoire **snort_src/** : `#mkdir ~/snort_src`
 
- `#mkdir ~/snort_src`
+On entre dans le répertoire créé avec la commande suivante : `#cd ~/snort_src/`
 
-On entre dans le répertoire créé avec la commande suivante :
+Ensuite on télécharge le daq-2.0.6 avec la commande ci-contre : `#wget https://snort.org/downloads/snort/daq-2.0.6.tar.gz`
 
- `#cd ~/snort_src/`
-
-Ensuite on télécharge le daq-2.0.6 avec la commande ci-contre :
-
- `#wget https://snort.org/downloads/snort/daq-2.0.6.tar.gz`
-
-On constate que le fichier téléchargé est un fichier compressé (extension.tar.gz), pour cela on le décompresse avec la commande ci-dessous :
- 
- `#tar -xvzf daq-2.0.6.tar.gz`
+On constate que le fichier téléchargé est un fichier compressé (extension.tar.gz), pour cela on le décompresse avec la commande suivante : `#tar -xvzf daq-2.0.6.tar.gz`
  
 Et enfin on procède à l’installation du daq-2.0.6 avec les commandes suivantes :
- 
- `#cd daq-2.0.6/`
- `#./configure`
- `#make && make install`
+```bash
+ #cd daq-2.0.6/
+ #./configure
+ #make && make install
+```
   
  Maintenant que nous avons fait le nécessaire en installant les prérequis de Snort, nous allons installer snort-2.9.15.1
  
@@ -288,13 +282,14 @@ Et enfin on procède à l’installation du daq-2.0.6 avec les commandes suivant
 
 Pour installer Snort, nous allons effectuer les mêmes actions que nous avons effectuées lors de l’installation précédente. À partir du terminal, nous allons exécuter les commandes suivantes :
 
- `**# cd ~/snort_src/`
- `#wget https://snort.org/downloads/snort/snort-2.9.15.1.tar.gz`
- `#tar -xvzf snort-2.9.15.1.tar.gz`
- `#cd snort-2.9.15.1/`
- `#./configure --enable-sourcefire`
- `#make && make install**`
- 
+```bash
+ # cd ~/snort_src/
+ # wget https://snort.org/downloads/snort/snort-2.9.15.1.tar.gz
+ # tar -xvzf snort-2.9.15.1.tar.gz
+ # cd snort-2.9.15.1/
+ # ./configure --enable-sourcefire
+ # make && make install
+```
 Ensuite, nous allons créer des fichiers et dossiers dont Snort aura besoin lorsqu'il sera exécuté. Nous attribuons la propriété de ces fichiers à l’utilisateur snort.
 
  - `/etc/snort` : pour les fichiers de configurations de Snort
@@ -302,27 +297,30 @@ Ensuite, nous allons créer des fichiers et dossiers dont Snort aura besoin lors
  - `/var/log/snort**` : dossier de journalisation de Snort.
 
 Pour cela on exécute les commandes suivantes depuis un terminal :
- 
- `#mkdir /etc/snor`
- `#mkdir /etc/snort/rules`
- `#mkdir /usr/local/lib/snort_dynamicrules`
- `#mkdir /var/log/snort`
+```bash
+ # mkdir /etc/snor
+ # mkdir /etc/snort/rules
+ # mkdir /usr/local/lib/snort_dynamicrules
+ # mkdir /var/log/snort
+```
 
 On crée les fichiers qui vont nous permettre d’éditer nos propres règles pour Snort avec les commandes ci-contre :
- 
- `**#touch /etc/snort/rules/white_list.rules`
- `#touch /etc/snort/rules/black_list.rules /etc/snort/rules/local.rules**`
+```bash
+ # touch /etc/snort/rules/white_list.rules
+ # touch /etc/snort/rules/black_list.rules /etc/snort/rules/local rules`
+```
 
 Nous allons attribuer les permissions d’écriture, de lecture et d’exécution sur les répertoires et fichiers créés :
-
- `**#chmod -R 777 /etc/snort`
- `#chmod -R 777 /var/log/snort`
- `#chmod -R 777 /usr/local/lib/snort_dynamicrules**`
-
+```bash
+ # chmod -R 777 /etc/snort
+ # chmod -R 777 /var/log/snort
+ # chmod -R 777 /usr/local/lib/snort_dynamicrules
+```
 On copie tous les fichiers ayant pour extension .conf et .map du répertoire `‶~/snort_src/snort-2.9.15.1/etc/` vers `/etc/snort/` (le répertoire de configuration de snort que nous venons de créer) avec les commande ci-dessous :
- 
+```bash
  `#cp ~/snort_src/snort-2.9.15.1/etc/*.conf* /etc/snort`
  `#cp ~/snort_src/snort-2.9.15.1/etc/*.map /etc/snort`
+```
 
 Maintenant, nous allons vérifier si Snort est bien installé avec la commande `‶snort -V` depuis le terminal :
 
