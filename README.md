@@ -116,7 +116,7 @@ Comme ici on garde l’installation locale (non accessible depuis l’extérieur
 
 - Activer et démarrer Elasticsearch :
  ``` bash
- # sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch`  
+ # sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch`
  # sudo systemctl status elasticsearch
  ```
 
@@ -132,7 +132,7 @@ Sinon cette réponse, il faudrait verifier la configuration et les règles du pa
 
 
 ### 3. Installer Logstash
-  `#sudo apt install logstash`
+  `# sudo apt install logstash`
 
 ![11](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/11.png)
 
@@ -144,8 +144,10 @@ Sinon, tu risques de voir dans Kibana que tu as des données, mais vides.
   `# sudo nano /etc/logstash/conf.d/beats.conf`
 
 - Activer et démarrer Logstash :
-  `# sudo systemctl enable logstash && sudo systemctl start logstash`
-  `# sudo systemctl status logstash`
+```bash
+  # sudo systemctl enable logstash && sudo systemctl start logstash
+  # sudo systemctl status logstash
+```
 
 ![12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/12.png)
 
@@ -156,11 +158,13 @@ Si le pare-feu est actif, autorise le port 5044 pour que Logstash reçoive les l
 
 ![13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/13.png)
 
-- Modifier le fichier de configuration : `# sudo nano /etc/kibana/kibana.yml`  
-on Décommente et ajuste les lignes  :
-  `-server.port: 5601`
-  `-server.host: "0.0.0.0"`
-  `-elasticsearch.hosts: ["http://localhost:9200"]`
+- Modifier le fichier de configuration : `# sudo nano /etc/kibana/kibana.yml`.
+Ensuite on Décommente et ajuste les lignes  :
+``` bash
+  -server.port: 5601
+  -server.host: "0.0.0.0"
+  -elasticsearch.hosts: ["http://localhost:9200"]
+```
 
  2- Activer et démarrer Kibana :  
 
@@ -178,8 +182,8 @@ Si tout s’est bien passé, tu peux naviguer vers l’adresse IP de ton serveur
 Sur la machine dont tu veux envoyer les logs :
  
   #### 5.1 - Télécharger et installer Filebeat :
-     `#curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.2-amd64.deb`
-    
+    `# curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.2-amd64.deb`
+      
   ![FLB](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/16.png)
       `#sudo dpkg -i filebeat-8.9.2-amd64.deb`
 
