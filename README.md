@@ -318,8 +318,8 @@ Nous allons attribuer les permissions d’écriture, de lecture et d’exécutio
 ```
 On copie tous les fichiers ayant pour extension .conf et .map du répertoire `‶~/snort_src/snort-2.9.15.1/etc/` vers `/etc/snort/` (le répertoire de configuration de snort que nous venons de créer) avec les commande ci-dessous :
 ```bash
- `#cp ~/snort_src/snort-2.9.15.1/etc/*.conf* /etc/snort`
- `#cp ~/snort_src/snort-2.9.15.1/etc/*.map /etc/snort`
+ `# cp ~/snort_src/snort-2.9.15.1/etc/*.conf* /etc/snort`
+ `# cp ~/snort_src/snort-2.9.15.1/etc/*.map /etc/snort`
 ```
 
 Maintenant, nous allons vérifier si Snort est bien installé avec la commande `‶snort -V` depuis le terminal :
@@ -370,7 +370,8 @@ Notons que nous avons la possibilité de définir les adresses des différents s
 
  ##### 6.7.2 - Test de la configuration du fichier de configuration de Snort**
 
-Pour vérifier si nos configurations sont bonnes, nous allons tester Snort avec la commande suivante : `# snort -T -c /etc/snort/snort.conf`
+Pour vérifier si nos configurations sont bonnes, nous allons tester Snort avec la commande suivante :   
+`# snort -T -c /etc/snort/snort.conf`
 
 Si tout va bien, on aura un résultat semblable à celui -ci où nous avons le message ‶snort sccessfully valided the configuration! ″ pour nous informer que nous avons bien configurer Snort.
 
