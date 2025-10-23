@@ -214,14 +214,15 @@ output.logstash:
 
  ![17](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/17.png)
 
-  #### 5.4 - Filebeat fournit des modules prédéfinis pour divers services (Apache, système, etc). Pour les visualiser :
- 
-`# sudo filebeat modules list`
+  #### 5.4 - Filebeat fournit des modules prédéfinis pour divers services (Apache, système, etc).
+
+Pour les visualiser : `# sudo filebeat modules list`
 
 Pour nous, on va activer les modules system et apache :
-
+```bash
 `# sudo filebeat modules enable system`
 `# sudo filebeat modules enable apache`
+```
 
 Chaque module correspond à un fichier de configuration dans /etc/filebeat/modules.d/. Ouvre-les et mets enabled: true si ce n’est pas déjà fait. (pense aux questions de format, crochets, guillemets, etc.)
 
