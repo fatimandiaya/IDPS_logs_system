@@ -74,7 +74,7 @@ Avant de commencer, quelques remarques :
 Allez, on y va !
 
 
-#### 1.1. Préparatifs & mise à jour
+#### 1.1. Préparatifs et mise à jour
 
   `#sudo apt update && sudo apt upgrade -y`
 
