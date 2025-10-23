@@ -424,7 +424,7 @@ Une fois les logs collectés par Filebeat et transmis à Logstash, ils sont inde
 Ce tableau de bord constitue l’interface centrale de supervision, offrant une vue synthétique et dynamique sur les événements de sécurité détectés dans notre environnement SOC.
 
 - Accès à Kibana
-L’interface Kibana est accessible via un navigateur à l’adresse suivante : `http://192.168.50.130:5601 `
+L’interface Kibana est accessible via un navigateur à l’adresse suivante : `http://"IP kibana":5601 `
 - Découverte des logs
 Dans la section Discover, nous avons exploré les logs bruts collectés par Filebeat. Cette vue permet de filtrer les événements selon plusieurs critères :
 
