@@ -115,7 +115,7 @@ Comme ici on garde l’installation locale (non accessible depuis l’extérieur
    ![7](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/7.png)
 
 - Activer et démarrer Elasticsearch :
-  `#sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch`
+  `#sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch`  
   `#sudo systemctl status elasticsearch`
 
 ![9](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/9.png)
@@ -154,14 +154,14 @@ Si le pare-feu est actif, autorise le port 5044 pour que Logstash reçoive les l
 
 ![13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/13.png)
 
-- Modifier le fichier de configuration : `# sudo nano /etc/kibana/kibana.yml`
- on Décommente et ajuste les lignes  :
+- Modifier le fichier de configuration : `# sudo nano /etc/kibana/kibana.yml`  
+on Décommente et ajuste les lignes  :
   `-server.port: 5601`
   `-server.host: "0.0.0.0"`
   `-elasticsearch.hosts: ["http://localhost:9200"]`
 
  2- Activer et démarrer Kibana :  
- 
+
   `# sudo systemctl enable kibana && sudo systemctl start kibana`  
   `# sudo systemctl status kibana`
 
