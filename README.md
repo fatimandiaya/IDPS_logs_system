@@ -51,7 +51,7 @@ L’infrastructure repose sur plusieurs machines virtuelles interconnectées :
 
  - Machine IDS/SIEM (Ubuntu-IDPS) :  Déploiement de Snort pour la détection d’intrusion et de la pile ELK (Elasticsearch, Logstash, Kibana) pour la collecte, la gestion et la visualisation des logs.
 
- - Machine attaquante (Kali Linux) Utilisée pour simuler les attaques dans les différents scénarios (scan, brute-force, injection, etc.).
+ - Machine attaquante (Kali Linux) : Utilisée pour simuler les attaques dans les différents scénarios (scan, brute-force, injection, etc.).
 
  - Machine serveur (Ubuntu-SRV) : Elle joue le rôle de victime Héberge contient l’application vulnérable DVWA (Damn Vulnerable Web Application), utilisée pour les scénarios d’injection SQL et de test de détection applicative.
  
