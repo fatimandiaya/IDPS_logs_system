@@ -205,7 +205,7 @@ output.logstash:
   hosts: ["192.168.50.130:5044"]
 ```
   
-`#### 5.3 - Activer et démarrer Filebeat : 
+#### 5.3 - Activer et démarrer Filebeat : 
 ```bash
   # sudo systemctl enable filebeat && sudo systemctl start filebeat
   # sudo systemctl status filebeat
