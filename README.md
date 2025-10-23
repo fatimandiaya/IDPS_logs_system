@@ -104,7 +104,7 @@ Comme ici on garde l’installation locale (non accessible depuis l’extérieur
 
 - Modifier le fichier de configuration d’Elasticsearch :
    
-  `#sudo nano /etc/elasticsearch/elasticsearch.yml`
+  `# sudo nano /etc/elasticsearch/elasticsearch.yml`
    
   - Pour rendre le service accessible depuis n’importe quelle adresse réseau, changer network.host de localhost à 0.0.0.0
 
@@ -115,8 +115,10 @@ Comme ici on garde l’installation locale (non accessible depuis l’extérieur
    ![7](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/7.png)
 
 - Activer et démarrer Elasticsearch :
-  `#sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch`  
-  `#sudo systemctl status elasticsearch`
+ ``` bash
+ # sudo systemctl enable elasticsearch && sudo systemctl start elasticsearch`  
+ # sudo systemctl status elasticsearch
+ ```
 
 ![9](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/9.png)
 
