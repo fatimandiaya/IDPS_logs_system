@@ -344,7 +344,7 @@ Nous allons vérifier si Oinkmaster est bien installé avec la commande : `oinkm
 
  ![24](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/24%20OINKMAKER.png)
 
-Nous allons éditer le fichier : `#vi /etc/oinkmaster.conf`
+Nous allons éditer le fichier : `# vi /etc/oinkmaster.conf`
 
  ![25](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/25.png)
 
@@ -353,14 +353,15 @@ Nous allons éditer le fichier : `#vi /etc/oinkmaster.conf`
 
  ##### 6.7.1 - Configuration de snort en mode IDS :
 
-Pour configurer snort en mode Network Intrusion Detection System, nous allons effectuer quelques modifications dans le principal fichier de configuration de snort qui est snort.conf qui se trouve dans `/etc/snort/snort.conf`.
+Pour configurer snort en mode Network Intrusion Detection System, nous allons effectuer quelques modifications dans le principal fichier de configuration de snort qui est snort.conf qui se trouve dans `/etc/snort/snort.conf`.  
+
 `#vi /etc/snort/snort.conf`
  
 Nous allons modifier les lignes suivantes pour informer snort des différents réseaux :
 
- `ipvar HOME_NET any en ipvar HOME_NET 192.168.50.0/24`: pour définir le réseau que nous allons protéger. Dans cet exemple c'est le réseau `192.168.50.0/24`, le `/24` pour préciser le masque de sous réseau.
+ - `ipvar HOME_NET any en ipvar HOME_NET 192.168.50.0/24`: pour définir le réseau que nous allons protéger. Dans cet exemple c'est le réseau `192.168.50.0/24`, le `/24` pour préciser le masque de sous réseau.
 
- `ipvar EXTERNAL_NET any en ipvar EXTERNAL_NET !$HOME_NET` : pour indiquer à snort que tout hôte dont l'adresse IP est différente de l'adresse du réseauprotégé est un hôte du réseau externe.
+ - `ipvar EXTERNAL_NET any en ipvar EXTERNAL_NET !$HOME_NET` : pour indiquer à snort que tout hôte dont l'adresse IP est différente de l'adresse du réseauprotégé est un hôte du réseau externe.
 Notons que nous avons la possibilité de définir les adresses des différents serveurs s’ils sont différents du `‘’$HOME_NET’’`.
 
  ![27](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/27.png)
