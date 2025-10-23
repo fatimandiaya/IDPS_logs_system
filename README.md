@@ -494,25 +494,28 @@ Sur cette première capture, on voit qu'on a exécuté la commande hping3 depuis
 
 Ensuite, dans le fichier alert_json.txt sur la machine IDS, on voit que Snort3 a bien généré une alerte avec le message “Déni de service - SYN flood détecté”
 ![S32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos2.png)
+
 Sur Kibana, l’alerte est bien visible. On retrouve l’IP source de Kali, l’IP cible DVWA, le port 80, et le SID de la règle.
 ![S33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos3.png)
+
 Cela confirme que le trafic SYN non complété a été détecté comme une tentative de saturation TCP, typique d’un DoS.
 ![S34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos4.png)
+
 Le serveur n’a pas répondu aux paquets SYN envoyés par l’attaquant, car ceux-ci n’étaient pas suivis d’un ACK, empêchant l’établissement complet des connexions TCP. Ce comportement a été intercepté par Snort, qui a reconnu le flot massif de paquets SYN non finalisés comme une attaque par déni de service. La visualisation dans Kibana permet ensuite de confirmer l’origine de l’attaque, le type de trafic observé, ainsi que la règle de détection déclenchée.
 
 
 ### Scénario 4 : Détection de malware (EICAR)
 
 L’attaque simule l’introduction d’un fichier malveillant dans le système cible afin d’évaluer la capacité de l’IDS à détecter une signature connue de malware. Pour ce test, nous utilisons le fichier EICAR, développé par l’European Institute for Computer Antivirus Research. Ce fichier est un standard international utilisé pour tester les antivirus et les systèmes de détection, sans présenter de danger réel pour les systèmes.
-**Méthode utilisée** : depuis notre VM Kali envoie directement la signature ASCII du fichier EICAR vers le port HTTP de la cible DVWA en utilisant `netcat` :`echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' | nc 192.168.50.20 80`
+**Méthode utilisée** : depuis notre VM Kali envoie directement la signature ASCII du fichier EICAR vers le port HTTP de la cible DVWA en utilisant `netcat` :`echo 'X5O!P%@AP[4\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*' | nc 192.168.50.20 80`  
+
 Cette commande simule un transfert réseau contenant une charge malveillante, sans passer par un navigateur ou un fichier physique.
 
 ![S41](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar1.png)
-
 Lors de l’envoi de la signature EICAR via le réseau , le serveur Apache retourne une erreur `HTTP 400 Bad Request` car la requête n’est pas conforme au protocole HTTP (pas de méthode `GET`, ni d’en-têtes). Ce comportement est typique d’un attaquant qui injecte directement une charge malveillante dans le flux réseau. 
 
-Malgré cette erreur côté serveur, Snort3 détecte la signature EICAR dans le contenu brut du paquet TCP, prouvant que la détection IDS ne dépend pas de la validité HTTP, mais bien de l’analyse du trafic réel.
 
+Malgré cette erreur côté serveur, Snort3 détecte la signature EICAR dans le contenu brut du paquet TCP, prouvant que la détection IDS ne dépend pas de la validité HTTP, mais bien de l’analyse du trafic réel.
 ![S42](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/eicar2.png)
 
 Dans Kibana, on retrouve l’alerte générée par Snort avec le message “Malware détecté - Fichier EICAR”. Les métadonnées que nous avons configurées précédemment permettent d’afficher clairement l’IP source (la machine Kali), l’IP cible (DVWA), le port `80` utilisé pour l’attaque, ainsi que le SID de la règle déclenchée. Cela confirme que la détection fonctionne correctement et que l’alerte est bien remontée dans la chaîne de logs.
@@ -521,10 +524,10 @@ Dans Kibana, on retrouve l’alerte générée par Snort avec le message “Malw
 
 ### Scénario 5 : injection SQL
 
-Dans ce scénario, j’ai simulé une attaque par injection SQL dans un environnement volontairement vulnérable afin de tester la capacité de notre pipeline Snort + ELK à détecter ce type de menace. Comme pour les autres scénarios, la cible reste la machine Ubuntu-SRV, mais cette fois-ci, l’attaque vise spécifiquement DVWA (Damn Vulnerable Web Application), une application web conçue pour l’apprentissage et la simulation d’attaques. DVWA est déployée sur la VM Ubuntu-SRV au sein de notre topologie EVE-NG.
+Dans ce scénario, j’ai simulé une attaque par injection SQL dans un environnement volontairement vulnérable afin de tester la capacité de notre pipeline Snort + ELK à détecter ce type de menace. Comme pour les autres scénarios, la cible reste la machine Ubuntu-SRV, mais cette fois-ci, l’attaque vise spécifiquement DVWA (Damn Vulnerable Web Application), une application web conçue pour l’apprentissage et la simulation d’attaques. DVWA est déployée sur la VM Ubuntu-SRV au sein de notre topologie EVE-NG.  
 Pour ce scénario, on a utilisé deux types d’injection SQL : **contournement d’authentification** et **reconnaissance de schéma**
   - #### 1 - Contournement d’authentification via OR 1=1#
-l'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. Ainsi l'attaquant contourne la vérification des identifiants et d’accéder à l’application sans mot de passe valide.
+L'objectif de l’attaque est de simuler une tentative de bypass d’authentification en injectant une condition SQL toujours vraie dans le champ id. Ainsi l'attaquant contourne la vérification des identifiants et d’accéder à l’application sans mot de passe valide.
 
 Sur kali, on accede a l'interface de DVWA , puis sur la section "SQL injection" et au niveau du champ input `"user ID"` on va injecté le payload : `1' OR 1=1#`
 ![S51](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/sql1.png)
