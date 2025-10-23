@@ -166,10 +166,11 @@ Ensuite on Décommente et ajuste les lignes  :
   -elasticsearch.hosts: ["http://localhost:9200"]
 ```
 
- 2- Activer et démarrer Kibana :  
-
-  `# sudo systemctl enable kibana && sudo systemctl start kibana`  
-  `# sudo systemctl status kibana`
+ - Activer et démarrer Kibana :  
+```bash
+  # sudo systemctl enable kibana && sudo systemctl start kibana 
+  # sudo systemctl status kibana
+```
 
 ![14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/14.png)
 
