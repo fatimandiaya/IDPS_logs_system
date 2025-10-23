@@ -160,7 +160,8 @@ Si le pare-feu est actif, autorise le port 5044 pour que Logstash reçoive les l
   `-server.host: "0.0.0.0"`
   `-elasticsearch.hosts: ["http://localhost:9200"]`
 
- 2- Activer et démarrer Kibana :
+ 2- Activer et démarrer Kibana :  
+ 
   `# sudo systemctl enable kibana && sudo systemctl start kibana`  
   `# sudo systemctl status kibana`
 
