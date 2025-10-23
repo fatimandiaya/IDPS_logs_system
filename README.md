@@ -182,14 +182,15 @@ Si tout s’est bien passé, tu peux naviguer vers l’adresse IP de ton serveur
 Sur la machine dont tu veux envoyer les logs :
  
   #### 5.1 - Télécharger et installer Filebeat :
-    `# curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.2-amd64.deb`
+  `# curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-8.9.2-amd64.deb`
       
   ![FLB](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/16.png)
-      `#sudo dpkg -i filebeat-8.9.2-amd64.deb`
+      
+  ensuite on l'installe avec : `# sudo dpkg -i filebeat-8.9.2-amd64.deb`
 
      
   #### 5.2 - Ouvrir le fichier de configuration :
-  `#sudo nano /etc/filebeat/filebeat.yml`
+  `# sudo nano /etc/filebeat/filebeat.yml`
 
  ![FLB](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/FLB.png)
 
@@ -199,12 +200,16 @@ Sur la machine dont tu veux envoyer les logs :
 
 ensuite on décommente la section output.logstash en indiquant l'adresse IP de ton serveur ELK (au lieu de localhost) :
  
-`output.logstash:`
-`  hosts: ["192.168.50.130:5044"]`
+```bash
+output.logstash:
+  hosts: ["192.168.50.130:5044"]
+```
   
  #### 5.3 - Activer et démarrer Filebeat : 
-    `#sudo systemctl enable filebeat && sudo systemctl start `filebeat`
-    `#sudo systemctl status filebeat`
+```bash
+  # sudo systemctl enable filebeat && sudo systemctl start filebeat
+  # sudo systemctl status filebeat
+```
 
 
  ![17](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/17.png)
