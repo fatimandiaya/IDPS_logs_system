@@ -419,7 +419,66 @@ On enregistre puis on quitte, ensuite on redémarre Snort et les outils complém
  ![34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/34.png)
 
 
-## V.  Scénarios
+## V. Dashboard Kibana
+Une fois les logs collectés par Filebeat et transmis à Logstash, ils sont indexés dans Elasticsearch. Grâce à Kibana, nous avons conçu un dashboard personnalisé permettant de visualiser en temps réel les alertes générées par Snort.
+Ce tableau de bord constitue l’interface centrale de supervision, offrant une vue synthétique et dynamique sur les événements de sécurité détectés dans notre environnement SOC.
+
+- Accès à Kibana
+L’interface Kibana est accessible via un navigateur à l’adresse suivante : `http://192.168.50.130:5601 `
+- Découverte des logs
+Dans la section Discover, nous avons exploré les logs bruts collectés par Filebeat. Cette vue permet de filtrer les événements selon plusieurs critères :
+
+  - Signature d’alerte
+  - IP source et IP cible
+  - Port ciblé
+  - Protocole réseau
+  - Plage temporelle
+
+- Champs utilisés pour les visualisations
+Les visualisations du dashboard s’appuient sur des champs enrichis via le format JSON dans la configuration de Snort, afin d’optimiser l’affichage et la lisibilité :
+
+  - alert.signature : nom de l’alerte déclenchée
+
+  - alert.signature_id : identifiant de la règle Snort
+
+  - source.ip / destination.ip : IP source et cible
+
+  - destination.port : port ciblé (ex : 22, 80)
+
+  - proto.transport : protocole utilisé (TCP, UDP, ICMP)
+
+  - @timestamp : date et heure de l’événement
+
+  - rule.keyword : nom de la règle Snort
+
+  - msg.keyword : message associé à l’alerte
+
+  - class : type d’attaque (scan, brute-force, injection, etc.)
+
+- Modules Filebeat activés
+Pour enrichir les logs système et web, nous avons activé les modules suivants :
+
+```bash
+sudo filebeat modules enable system
+sudo filebeat modules enable apache
+```
+Ces modules fournissent des dashboards prêts à l’emploi dans Kibana,
+- Exemple de dashboard
+
+ ![dash](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dashboard.png)
+
+- Résultats obtenus
+Le dashboard Kibana nous a permis de :
+
+  - Visualiser en temps réel les attaques détectées
+
+  - Identifier les sources malveillantes et les ports ciblés
+
+  - Suivre les tendances d’attaque par type, protocole et fréquence
+
+  - Valider l’efficacité des règles Snort dans un contexte opérationnel
+
+## VI.  Scénarios
 les cinq scénarios d’attaque suivant ont été sélectionnés pour leur pertinence opérationnelle, leur diversité technique, et leur capacité à illustrer les capacités de détection et de corrélation d’un pipeline SOC local. 
 Chaque scénario cible une classe de menace différente, permettant de tester :
   - La détection en temps réel par l’IDS/IPS
