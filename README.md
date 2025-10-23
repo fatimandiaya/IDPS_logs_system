@@ -138,32 +138,31 @@ Sinon cette réponse, il faudrait verifier la configuration et les règles du pa
 Pour que Logstash traite correctement les logs que tu enverras via Filebeat, il faut configurer des filtres.
 Sinon, tu risques de voir dans Kibana que tu as des données, mais vides.
 
- 1. Créer un fichier de filtre :
-  `#sudo nano /etc/logstash/conf.d/beats.conf`
+- Créer un fichier de filtre :
+  `# sudo nano /etc/logstash/conf.d/beats.conf`
 
- 2. Activer et démarrer Logstash :
-  `#sudo systemctl enable logstash && sudo systemctl start logstash`
-  `#sudo systemctl status logstash`
+- Activer et démarrer Logstash :
+  `# sudo systemctl enable logstash && sudo systemctl start logstash`
+  `# sudo systemctl status logstash`
 
 ![12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/12.png)
 
 Si le pare-feu est actif, autorise le port 5044 pour que Logstash reçoive les logs.
 
 ### 4. Installer Kibana
-  `#sudo apt install kibana`
+  `# sudo apt install kibana`
 
 ![13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/13.png)
 
- 1- Modifier le fichier de configuration :
- `#sudo nano /etc/kibana/kibana.yml`
- Décommente et ajuste :
+- Modifier le fichier de configuration : `# sudo nano /etc/kibana/kibana.yml`
+ on Décommente et ajuste les lignes  :
   `-server.port: 5601`
   `-server.host: "0.0.0.0"`
   `-elasticsearch.hosts: ["http://localhost:9200"]`
 
  2- Activer et démarrer Kibana :
-  `#sudo systemctl enable kibana && sudo systemctl start kibana`
-  `#sudo systemctl status kibana`
+  `# sudo systemctl enable kibana && sudo systemctl start kibana`  
+  `# sudo systemctl status kibana`
 
 ![14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/14.png)
 
