@@ -353,9 +353,9 @@ Nous allons éditer le fichier : `# vi /etc/oinkmaster.conf`
 
  ##### 6.7.1 - Configuration de snort en mode IDS :
 
-Pour configurer snort en mode Network Intrusion Detection System, nous allons effectuer quelques modifications dans le principal fichier de configuration de snort qui est snort.conf qui se trouve dans `/etc/snort/snort.conf`.  
+Pour configurer snort en mode Network Intrusion Detection System, nous allons effectuer quelques modifications dans le principal fichier de configuration de snort qui est snort.conf qui se trouve dans **/etc/snort/snort.conf**.  
 
-`#vi /etc/snort/snort.conf`
+`# vi /etc/snort/snort.conf`
  
 Nous allons modifier les lignes suivantes pour informer snort des différents réseaux :
 
@@ -370,7 +370,7 @@ Notons que nous avons la possibilité de définir les adresses des différents s
 
  ##### 6.7.2 - Test de la configuration du fichier de configuration de Snort**
 
-Pour vérifier si nos configurations sont bonnes, nous allons tester Snort avec la commande suivante : `#snort -T -c /etc/snort/snort.conf`
+Pour vérifier si nos configurations sont bonnes, nous allons tester Snort avec la commande suivante : `# snort -T -c /etc/snort/snort.conf`
 
 Si tout va bien, on aura un résultat semblable à celui -ci où nous avons le message ‶snort sccessfully valided the configuration! ″ pour nous informer que nous avons bien configurer Snort.
 
@@ -389,19 +389,19 @@ On enregistre puis on quitte, ensuite on démarre Snort et les outils complémen
 Sur la machine du pirate (192.168.40.129) nous allons dans le terminal pour générer les paquets ICMP, Telnet et FTP pour tester le fonctionnement de Snort.
 Pour détecter les alertes dans la console par Snort, on tape dans le terminal de VM1 (machine sur laquelle nous avons installé Snort) la commande suivante :
 
-  `#Snort -A console -q -c  /etc/snort/snort.conf -I ens33`
+  `# Snort -A console -q -c  /etc/snort/snort.conf -I ens33`
 
  ![29](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/29.png)
 
 Sur la figure, nous remarquons que Snort a détecté les paquets Telnet avec le message `‶Telnet connexion″`. Nous pouvons conclure que le mode IDS de Snort fonctionne correctement.
 
  ##### 6.8 - Configuration de  Snort en mode IPS
-Pour configurer Snort en tant que IPS, nous avons besoin d'apporter quelques modifications dans `snort.conf`. Mais avant, il faut vérifier les versions de DAQ installées avec la commande cicontre : `#snort --daq-list`
+Pour configurer Snort en tant que IPS, nous avons besoin d'apporter quelques modifications dans `snort.conf`. Mais avant, il faut vérifier les versions de DAQ installées avec la commande cicontre : `# snort --daq-list`
 Nous allons ajouter les lignes ciaprès au fichier de configuration de snort (`snort.conf`)
 
  ![31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/31.png)
 
-Nous allons vérifier la configuration du mode inline (IPS) : `#snort -T -c /etc/snort/snort.conf -Q -i ens32:ens33`
+Nous allons vérifier la configuration du mode inline (IPS) : `# snort -T -c /etc/snort/snort.conf -Q -i ens32:ens33`
  
  #### 6.8.1 - Test du mode IPS:
 Pour le test du mode IPS on pourra bien simuler une attaque Denial of Service (DoS), mais l’inconvénient est que nous ne pourrons pas l’illustrer de façon claire et concis dans le document. Pour cela nous allons réaliser le test du mode IPS en reprenant le test précèdent en stoppant les paquets ICMP, Telnet et FTP.
@@ -413,7 +413,7 @@ On enregistre puis on quitte, ensuite on redémarre Snort et les outils complém
 
  ![33](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/33.png)
 
- `#snort -A console -q -c /etc/snort/snort.conf -I ens32:ens33`
+ `# snort -A console -q -c /etc/snort/snort.conf -I ens32:ens33`
 
  ![34](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/34.png)
 
@@ -441,13 +441,15 @@ Sur la machine Kali, nous avons lancé un scan réseau avec Nmap afin d’identi
 Snort a bien intercepté les paquets SYN répétés et a généré des alertes dans le fichier de logs `"alert_json.txt"`
 ![S12](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap2.png)
 
+
 Dans Kibana, on retrouve cette alerte avec le message “Scan Nmap SYN détecté”, l’IP source de Kali, et l’IP cible DVWA.
 ![S13](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap3.png)
 Cela confirme que le scan a été détecté comme une tentative de reconnaissance réseau, grâce à la règle `sid:1000101`.
 ![S14](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/nmap4.png)
 
 
-### Scénario 2 :  Attaque par brute-force SSH**
+
+### Scénario 2 :  Attaque par brute-force SSH
 
 Un cybercriminel effectue une tentative d’accès non autorisé à un serveur via le protocole SSH, en utilisant une attaque par brute-force. Ce type d’attaque consiste à tester un grand nombre de combinaisons de login/mot de passe dans un temps court, dans le but de compromettre un compte valide. Outil utilise : Hydra
 
@@ -464,8 +466,11 @@ Ensuite depuis kali nous avons exécuté : `hydra -l admin -P /usr/share/wordlis
 ![36](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh2.png)
 Snort a détecté un nombre élevé de connexions SSH en peu de temps et a généré des alertes.
 ![S21](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh3.png)
+
+
 Sur Kibana, on voit clairement l’alerte “Brute-force SSH détecté”, avec l’IP source de Kali et le port 22 ciblé.
 ![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh4.png)
+
 La règle sid:1000201 s’est déclenchée après 10 connexions en moins de 60 secondes, ce qui valide la détection.
 ![S22](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/ssh5.png)
 
@@ -486,6 +491,7 @@ L’attaquant effectue une attaque par déni de service (DoS) en saturant la tab
 
 Sur cette première capture, on voit qu'on a exécuté la commande hping3 depuis Kali. Le terminal affiche l’envoi massif de paquets SYN vers le port 80 de DVWA.
 ![S31](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos1.png)
+
 Ensuite, dans le fichier alert_json.txt sur la machine IDS, on voit que Snort3 a bien généré une alerte avec le message “Déni de service - SYN flood détecté”
 ![S32](https://github.com/fatimandiaya/IDPS_logs_system/blob/main/Images/dos2.png)
 Sur Kibana, l’alerte est bien visible. On retrouve l’IP source de Kali, l’IP cible DVWA, le port 80, et le SID de la règle.
